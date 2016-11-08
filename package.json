@@ -1,0 +1,22 @@
+{
+  "name": "arsu-backend",
+  "version": "0.1.0",
+  "description": "User & playlist management backend api",
+  "repository" : "tbd",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "jsonwebtoken": "^7.1.9",
+    "mysql": "^2.11.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0"
+  },
+  "scripts": {
+    "test": "mocha",
+    "start": "mocha && node src/app.js"
+  },
+  "author": "mattpe",
+  "license": "ISC"
+}
