@@ -1,6 +1,7 @@
 var chai = require('chai');
 var chaiHttp = require('chai-http');
 var server = require('../src/app');
+var utils = require('./utils');
 
 var should = chai.should();
 chai.use(chaiHttp);
@@ -8,6 +9,12 @@ chai.use(chaiHttp);
 describe('Users', function() {
 
   var basePath = server.get('basePath');
+
+  after(function (done){
+    utils.removeTestUser();
+    done();
+  });
+
 
   it('should list ALL users on /users GET', function(done) {
     chai.request(server)

@@ -8,9 +8,17 @@ chai.use(chaiHttp);
 
 describe('Authentication', function() {
 
+  var basePath = server.get('basePath');
+
+  before(function (done) {
+    utils.removeTestUser();
+    utils.createTestUser();
+    done();
+  });
+
   it('should provide token when logging in as a valid user', function (done){
     chai.request(server)
-      .post('/arsu/login')
+      .post(basePath + 'login')
       .send(utils.testUser)
       .end(function (err, res) {
         res.should.have.status(200);

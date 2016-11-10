@@ -1,6 +1,7 @@
 var chai = require('chai');
 var chaiHttp = require('chai-http');
 var server = require('../src/app');
+var utils = require('./utils');
 
 var should = chai.should();
 chai.use(chaiHttp);
@@ -12,6 +13,30 @@ describe('Playlists', function() {
   before(function (done) {
     //TODO: delete all playlists by testuser and add a sample (in utils.js?)
     done();
+  });
+
+  after(function (done){
+    done();
+  });
+
+  it('should add a SINGLE playlist on /playlists POST', function(done) {
+    chai.request(server)
+      .post(basePath + 'playlists')
+      .set('x-access-token', server.get('testToken'))
+      .send({
+        playlist_name: "Test playlist",
+        // use testToken to resolve users id
+        user_id: utils.getTestUserId(server.get('testToken'))
+      })
+      .end(function(err, res){
+        res.should.have.status(201);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.property('message');
+        res.body.should.have.property('id');
+        // res.body.id.should.equal(lastIndexId);
+        done();
+      });
   });
 
   it('should list ALL playlists on /playlists GET', function(done) {
@@ -84,8 +109,7 @@ describe('Playlists', function() {
       });
   });
 
-  it('should add a SINGLE playlist on /playlists POST');
-  it('should update a SINGLE playlist on /playlists/:id PUT');
+  it('should update (add content to) a SINGLE playlist on /playlists/:id PUT');
   it('should delete a SINGLE playlist and ALL content on /playlists/:id DELETE');
 
 });

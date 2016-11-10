@@ -3,6 +3,8 @@
 # Edited settings file
 src/config.js
 
+dev-docs/
+
 # Logs
 logs
 *.log

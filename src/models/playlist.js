@@ -75,12 +75,21 @@ function Playlist() {
   this.create = function(res, playlist) {
     connection.acquire(function(err, con) {
       con.query('insert into Playlists set ?', playlist, function(err, result) {
-        con.release();
         if (err) {
-         res.status(400).send({message: 'Playlist creation failed'});
-        } else {
-         res.status(201).send({message: 'Playlist created successfully'});
+          con.release();
+          res.status(400).send({message: 'Playlist creation failed'});
+          return;
         }
+        con.query('SELECT LAST_INSERT_ID()', function(err, result) {
+          con.release();
+          if (err) {
+            res.status(400).send({message: 'Playlist creation failed'});
+          } else {
+            res.status(201).send({message: 'Playlist created successfully',
+                                  id: result[0]['LAST_INSERT_ID()']
+                                });
+          }
+        });
       });
     });
   };

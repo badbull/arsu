@@ -2,6 +2,7 @@ var jwt = require('jsonwebtoken');
 var user = require('./models/user');
 var auth = require('./models/authentication');
 var playlist = require('./models/playlist');
+var history = require('./models/history');
 var config = require('./config');
 
 var decodedUser;
@@ -41,23 +42,28 @@ module.exports = {
 
     // User endpoints
 
-    app.get(basePath + 'users', function(req, res) {
-      user.get(res);
-    });
+    app.route(basePath + 'users')
+      .get(function(req, res) {
+        user.get(res);
+      })
+      .post(function(req, res) {
+        user.create(res, req.body);
+      });
 
-    app.get(basePath + 'users/:id', function(req, res) {
-      user.getById(res, req.params.id);
-    });
-
-    app.post(basePath + 'users', function(req, res) {
-      user.create(res, req.body);
-    });
+    app.route(basePath + 'users/:id')
+      .get(function(req, res) {
+        user.getById(res, req.params.id);
+      });
 
     // Playlist endpoints
 
-    app.get(basePath + 'playlists', function(req, res) {
-      playlist.get(res);
-    });
+    app.route(basePath + 'playlists')
+      .get(function(req, res) {
+        playlist.get(res);
+      })
+      .post(function(req, res) {
+        playlist.create(res, req.body);
+      });
 
     app.get(basePath + 'playlists/user', function(req, res) {
       playlist.getByUserId(res, decodedUser.id);
@@ -67,23 +73,26 @@ module.exports = {
       playlist.getByUserId(res, req.params.id);
     });
 
-    app.get(basePath + 'playlists/:id', function(req, res) {
-      playlist.getById(res, req.params.id);
-    });
-
-    app.delete(basePath + 'playlists/:id', function(req, res) {
-      playlist.delete(res, req.params.id);
-    });
-
-    app.post(basePath + 'playlists', function(req, res) {
-      playlist.create(res, req.body);
-    });
-
-    app.put(basePath + 'playlists/:id', function(req, res) {
-      playlist.addContent(res, decodedUser.id, req.params.id, req.body);
-    });
+    app.route(basePath + 'playlists/:id')
+      .get(function(req, res) {
+        playlist.getById(res, req.params.id);
+      })
+      .delete(function(req, res) {
+        playlist.delete(res, req.params.id);
+      })
+      .put(function(req, res) {
+        playlist.addContent(res, decodedUser.id, req.params.id, req.body);
+      });
 
     // History endpoints
+
+    app.route(basePath + 'history')
+      .post(function (req, res) {
+        history.addEntry(res, decodedUser.id, req.body);
+      })
+      .get(function (req, res) {
+        history.getEntries(res, decodedUser.id);
+      });
 
     // Favourite endpoints
 
