@@ -35,10 +35,6 @@ module.exports = {
       auth.login(req.body.username, req.body.password, res);
     });
 
-    // logout not used
-    // app.get(basePath + 'logout', function(req, res) {
-    //     auth.logout(decodedUser.id, res);
-    // });
 
     // User endpoints
 
@@ -62,7 +58,7 @@ module.exports = {
         playlist.get(res);
       })
       .post(function(req, res) {
-        playlist.create(res, req.body);
+        playlist.create(res, decodedUser.id, req.body);
       });
 
     app.get(basePath + 'playlists/user', function(req, res) {

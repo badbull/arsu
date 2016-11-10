@@ -19,10 +19,17 @@ function Playlist() {
    */
   this.getById = function(res, playlistId) {
     connection.acquire(function(err, con) {
-      con.query('SELECT * FROM Playlists JOIN PlaylistContent ON Playlists.id=PlaylistContent.playlist_id WHERE Playlists.id=?', playlistId, function(err, result) {
+      con.query('SELECT * FROM Playlists LEFT JOIN PlaylistContent ON Playlists.id=PlaylistContent.playlist_id WHERE Playlists.id=?', playlistId, function(err, result) {
         con.release();
         if (!result[0]) {
-          res.status(404).send({message: 'Playlist not found', error: err ? err : "none"});
+          return res.status(404).send({message: 'Playlist not found'});
+        } else if (!result[0].id) {
+          output = {
+            playlist_id: playlistId,
+            user_id: result[0].user_id,
+            playlist_name: result[0].playlist_name,
+            content: []
+          };
         } else {
           output = {
             playlist_id: result[0].playlist_id,
@@ -35,8 +42,8 @@ function Playlist() {
             delete item.playlist_name;
             delete item.user_id;
           }
-          res.send(output);
         }
+      res.send(output);
       });
     });
   };
@@ -72,24 +79,19 @@ function Playlist() {
   /**
    * Create a new playlist
    */
-  this.create = function(res, playlist) {
+  this.create = function(res, userId, playlist) {
+    playlist.user_id = userId;
     connection.acquire(function(err, con) {
       con.query('insert into Playlists set ?', playlist, function(err, result) {
+        con.release();
         if (err) {
-          con.release();
           res.status(400).send({message: 'Playlist creation failed'});
-          return;
+        } else {
+          res.status(201).send({
+            message: 'Playlist created successfully',
+            id: result.insertId
+          });
         }
-        con.query('SELECT LAST_INSERT_ID()', function(err, result) {
-          con.release();
-          if (err) {
-            res.status(400).send({message: 'Playlist creation failed'});
-          } else {
-            res.status(201).send({message: 'Playlist created successfully',
-                                  id: result[0]['LAST_INSERT_ID()']
-                                });
-          }
-        });
       });
     });
   };
@@ -105,7 +107,6 @@ function Playlist() {
       con.query('INSERT INTO PlaylistContent SET ?', playlistContent, function(err, result) {
         con.release();
         if (err) {
-        //  console.log(err);
          res.status(400).send({message: 'Adding playlist content failed'});
         } else {
          res.status(201).send({message: 'Added playlist content successfully'});

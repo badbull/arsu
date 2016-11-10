@@ -31,13 +31,6 @@ function Authentication() {
     });
   };
 
-  this.logout = function(userId, res) {
-      res.send({'user': userId, 'message': 'user logged out'});
-      /* TODO: this really does nothing at the moment, should it?
-      *  token expires automatically in 'expiresIn' time and there is
-      *  not simple way to do it manually. */
-  };
-
 }
 
 module.exports = new Authentication();

@@ -2,7 +2,7 @@
   "name": "arsu-backend",
   "version": "0.1.0",
   "description": "User & playlist management backend api",
-  "repository" : "tbd",
+  "repository": "https://github.com/mattpe/arsu",
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
