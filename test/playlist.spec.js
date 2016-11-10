@@ -150,6 +150,17 @@ describe('Playlists', function() {
       });
   });
 
-  it('should delete a SINGLE playlist and ALL content on /playlists/:id DELETE');
+  it('should delete a SINGLE playlist and ALL content on /playlists/:id DELETE', function(done) {
+    chai.request(app)
+      .delete(basePath + 'playlists/' + testPlaylistId)
+      .set('x-access-token', app.get('testToken'))
+      .end(function(err, res){
+        console.log(res);
+        res.should.have.status(200);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        done();
+      });
+    });
 
 });

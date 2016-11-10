@@ -50,16 +50,25 @@ function Playlist() {
 
   /**
    * Remove a playlist by its id
+   * TODO: get rid of nested queries -> fix db: add cascades to fk(s)
    */
   this.delete = function(res, playlistId) {
     connection.acquire(function(err, con) {
-      con.query('delete from Playlists where id=?', playlistId, function(err, result) {
-        con.release();
-        if (result.affectedRows === 0) {
-          res.status(404).send({message: 'Playlist not found'});
-        } else {
-          res.send({message: 'Playlist deleted'});
-        }
+      con.query('delete from PlaylistContent where playlist_id=?', playlistId, function(err, result) {
+          if (err) {
+            con.release();
+            return res.status(400).send({message: 'Playlist content deletion failed'});
+          }
+        con.query('delete from Playlists where id=?', playlistId, function(err, result) {
+          con.release();
+          if (err) {
+            res.status(400).send({message: 'Playlist deletion failed'});
+          } else if (result.affectedRows === 0) {
+            res.status(404).send({message: 'Playlist not found'});
+          } else {
+            res.send({message: 'Playlist deleted'});
+          }
+        });
       });
     });
   };
