@@ -39,14 +39,61 @@ module.exports = {
     // User endpoints
 
     app.route(basePath + 'users')
+    /**
+     * @api {get} users Request User list
+     * @apiName GetUsers
+     * @apiGroup User
+     *
+     * @apiSuccess {Object[]} users List of users.
+     * @apiSuccess {Number} users.id User id.
+     * @apiSuccess {String} users.username Username of the User.
+     * @apiSuccess {String} users.email Email address of the User.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     [{
+     *       "userid": 1,
+     *       "username": "johnd",
+     *       "email": "john@example.com"
+     *     }]
+     */
       .get(function(req, res) {
         user.get(res);
       })
       .post(function(req, res) {
         user.create(res, req.body);
+      })
+      .put(function(req, res) {
+        user.edit(res, decodedUser.id, req.body);
       });
 
     app.route(basePath + 'users/:id')
+    /**
+     * @api {get} users/:id Request User information
+     * @apiName GetUser
+     * @apiGroup User
+     *
+     * @apiParam {Number} id Users unique ID.
+     *
+     * @apiSuccess {Object} user User info.
+     * @apiSuccess {String} user.username Username of the User.
+     * @apiSuccess {String} user.email email of the User.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "username": "johnd",
+     *       "email": "john@example.com"
+     *     }
+     *
+     * @apiError UserNotFound The id of the User was not found.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "message": "User Not Found"
+     *     }
+     */
       .get(function(req, res) {
         user.getById(res, req.params.id);
       });

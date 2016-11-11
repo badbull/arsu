@@ -30,11 +30,31 @@ function User() {
         if (err) {
          res.status(400).send({message: 'User creation failed'});
         } else {
-         res.status(201).send({message: 'User created successfully'});
+         res.status(201).send({
+           message: 'User created successfully',
+           id: result.insertId
+          });
         }
       });
     });
   };
+
+  this.edit = function(res, userId, user) {
+    connection.acquire(function(err, con) {
+      con.query('update Users set ? where id=?', [user, userId], function(err, result) {
+        con.release();
+      console.log(result);
+        if (err) {
+         res.status(400).send({message: 'User data update failed'});
+        } else {
+         res.status(200).send({
+           message: (result.affectedRows > 0) ? 'User data updated' : 'Nothing changed'
+          });
+        }
+      });
+    });
+  };
+
 
 }
 

@@ -155,7 +155,6 @@ describe('Playlists', function() {
       .delete(basePath + 'playlists/' + testPlaylistId)
       .set('x-access-token', app.get('testToken'))
       .end(function(err, res){
-        console.log(res);
         res.should.have.status(200);
         res.should.be.json;
         res.body.should.be.a('object');
