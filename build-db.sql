@@ -21,25 +21,25 @@ PRIMARY KEY (`id`) ,
 FOREIGN KEY (`user_id`) REFERENCES Users(`id`)) ENGINE = InnoDB;
 
 CREATE TABLE `arsu`.`PlaylistContent` ( `id` INT NOT NULL AUTO_INCREMENT ,
-`podcast_id` INT NOT NULL ,
+`podcast_id` BIGINT NOT NULL ,
 `playlist_id` INT NOT NULL ,
 PRIMARY KEY (`id`) ,
 FOREIGN KEY (`playlist_id`) REFERENCES Playlists(`id`)) ENGINE = InnoDB;
 
 CREATE TABLE `arsu`.`History` ( `id` INT NOT NULL AUTO_INCREMENT ,
-`podcast_id` INT NOT NULL ,
+`podcast_id` BIGINT NOT NULL ,
 `user_id` INT NOT NULL ,
 PRIMARY KEY (`id`) ,
 FOREIGN KEY (`user_id`) REFERENCES Users(`id`)) ENGINE = InnoDB;
 
 CREATE TABLE `arsu`.`Favourites` ( `id` INT NOT NULL AUTO_INCREMENT ,
-`podcast_id` INT NOT NULL ,
+`podcast_id` BIGINT NOT NULL ,
 `user_id` INT NOT NULL ,
 PRIMARY KEY (`id`) ,
 FOREIGN KEY (`user_id`) REFERENCES Users(`id`)) ENGINE = InnoDB;
 
 CREATE TABLE `arsu`.`Unfinished` ( `id` INT NOT NULL AUTO_INCREMENT ,
-`podcast_id` INT NOT NULL ,
+`podcast_id` BIGINT NOT NULL ,
 `user_id` INT NOT NULL ,
 `timestamp` TIMESTAMP NOT NULL ,
 PRIMARY KEY (`id`) ,
