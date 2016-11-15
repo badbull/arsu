@@ -96,6 +96,9 @@ module.exports = {
      */
       .get(function(req, res) {
         user.getById(res, req.params.id);
+      })
+      .delete(function(req, res) {
+        user.deleteById(res, decodedUser, req.params.id);
       });
 
     // Playlist endpoints
@@ -112,9 +115,10 @@ module.exports = {
       playlist.getByUserId(res, decodedUser.id);
     });
 
-    app.get(basePath + 'playlists/user/:id', function(req, res) {
-      playlist.getByUserId(res, req.params.id);
-    });
+    app.route(basePath + 'playlists/user/:id')
+      .get(function(req, res) {
+        playlist.getByUserId(res, req.params.id);
+      });
 
     app.route(basePath + 'playlists/:id')
       .get(function(req, res) {
@@ -136,6 +140,11 @@ module.exports = {
       .get(function (req, res) {
         history.getEntries(res, decodedUser.id);
       });
+
+    app.route(basePath + 'history/:id')
+      .delete(function (req, res) {
+        history.deleteEntry(res, decodedUser.id, req.params.id);
+      })
 
     // Favourite endpoints
 

@@ -61,7 +61,7 @@ describe('Playlists', function() {
       });
   });
 
-  it('should list ALL playlists owned by current user on /playlists/user GET', function(done) {
+  it('should list ALL playlists owned by CURRENT user on /playlists/user GET', function(done) {
     chai.request(app)
       .get(basePath + 'playlists/user')
       .set('x-access-token', app.get('testToken'))
@@ -77,9 +77,9 @@ describe('Playlists', function() {
       });
   });
 
-  it('should list ALL playlists owned by specific user on /playlists/user/:id GET', function(done) {
+  it('should list ALL playlists owned by a specific user on /playlists/user/:id GET', function(done) {
     chai.request(app)
-      .get(basePath + 'playlists/user/1')
+      .get(basePath + 'playlists/user/' + testUserId)
       .set('x-access-token', app.get('testToken'))
       .end(function(err, res){
         res.should.have.status(200);
@@ -89,7 +89,8 @@ describe('Playlists', function() {
         res.body[0].should.have.property('id');
         res.body[0].should.have.property('playlist_name');
         res.body[0].should.have.property('user_id');
-        res.body[0].user_id.should.equal(1);
+        res.body[0].user_id.should.equal(testUserId);
+        res.body[0].playlist_name.should.equal("Test playlist");
         done();
       });
   });
@@ -99,8 +100,7 @@ describe('Playlists', function() {
       .put(basePath + 'playlists/' + testPlaylistId)
       .set('x-access-token', app.get('testToken'))
       .send({
-        episode_id: 1,
-        serie_id: 2
+        podcast_id: 1
       })
       .end(function(err, res){
         res.should.have.status(201);
@@ -142,10 +142,8 @@ describe('Playlists', function() {
         res.body.should.have.property('content');
         res.body.content.should.be.a('array');
         res.body.content[0].should.be.a('object');
-        res.body.content[0].should.have.property('episode_id');
-        res.body.content[0].should.have.property('serie_id');
-        res.body.content[0].episode_id.should.equal(1);
-        res.body.content[0].serie_id.should.equal(2);
+        res.body.content[0].should.have.property('podcast_id');
+        res.body.content[0].podcast_id.should.equal(1);
         done();
       });
   });

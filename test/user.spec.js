@@ -23,7 +23,8 @@ describe('Users', function() {
       .send({
         username: "johnd",
         password: "passTest123",
-        email: "john.doe@example.com"
+        email: "john.doe@example.com",
+        is_admin: 1
       })
       .end(function(err, res){
         res.should.have.status(201);
@@ -37,14 +38,12 @@ describe('Users', function() {
       });
   });
 
-  it('should update a SINGLE user on /users/:id PUT', function(done) {
+  it('should update the CURRENT user on /users PUT', function(done) {
     chai.request(app)
       .put(basePath + 'users')
       .set('x-access-token', app.get('testToken'))
       .send({
-        username: "johnd",
-        password: "passTest123",
-        email: "john@example.com"
+        email: "test-user@example.com"
       })
       .end(function(err, res){
         res.should.have.status(200);
@@ -81,11 +80,22 @@ describe('Users', function() {
         res.body.should.have.property('username');
         res.body.username.should.equal('johnd');
         res.body.should.have.property('email');
-        res.body.email.should.equal('john@example.com');
+        res.body.email.should.equal('john.doe@example.com');
         done();
       });
     });
 
-  it('should delete a SINGLE user on /users/:id DELETE');
+  // Only for admin accounts
+  it('should delete a SINGLE user on /users/:id DELETE', function(done) {
+    chai.request(app)
+      .delete(basePath + 'users/' + addedUserId)
+      .set('x-access-token', app.get('testToken'))
+      .end(function(err, res){
+        res.should.have.status(200);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        done();
+      });
+    });
 
 });

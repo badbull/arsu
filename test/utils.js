@@ -4,7 +4,12 @@ var config = require('../src/config');
 
 var utils = {
 
-  testUser: {username: 'testUser', password: 'testPass', email: "test@example.com"},
+  testUser: {
+    username: 'testUser',
+    password: 'testPass',
+    is_admin: 1,
+    email: "test@example.com"
+  },
 
   getTestUserId: function(token) {
     return jwt.verify(token, config.tokenSecret).id;
@@ -29,6 +34,8 @@ var utils = {
         con.release();
         if (err) {
          console.log('Test user remove failed');
+        } else {
+         console.log('Test user removed');
         }
       });
     });
