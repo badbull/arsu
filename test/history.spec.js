@@ -1,7 +1,6 @@
 var chai = require('chai');
 var chaiHttp = require('chai-http');
 var app = require('../src/app');
-var utils = require('./utils');
 
 var should = chai.should();
 chai.use(chaiHttp);
@@ -24,13 +23,28 @@ describe('History', function() {
         res.body.should.be.a('object');
         res.body.should.have.property('message');
         res.body.should.have.property('id');
-        // Save id of the user created for other tests
+        // Save id of the created item for other tests
         addedEntryId = res.body.id;
         done();
       });
   });
 
-  it('should list ALL history entries by the CURRENT user on /history/user GET');
+  it('should list ALL history entries by the CURRENT user on /history GET', function(done) {
+    chai.request(app)
+      .get(basePath + 'history')
+      .set('x-access-token', app.get('testToken'))
+      .end(function(err, res){
+        res.should.have.status(200);
+        res.should.be.json;
+        res.body.should.be.a('array');
+        res.body[0].should.be.a('object');
+        res.body[0].should.have.property('id');
+        res.body[0].should.have.property('podcast_id');
+        res.body[0].podcast_id.should.equal(1);
+        res.body[0].should.have.property('user_id');
+        done();
+      });
+  });
 
   it('should delete a SINGLE history entry of the CURRENT user on /history/:id DELETE', function(done) {
     chai.request(app)
@@ -42,8 +56,6 @@ describe('History', function() {
         res.body.should.be.a('object');
         done();
       });
-    });
-
-  // it('should list a SINGLE history entry on /history/:id GET');
+   });
 
 });
