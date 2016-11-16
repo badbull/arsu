@@ -41,6 +41,6 @@ FOREIGN KEY (`user_id`) REFERENCES Users(`id`)) ENGINE = InnoDB;
 CREATE TABLE `arsu`.`Unfinished` ( `id` INT NOT NULL AUTO_INCREMENT ,
 `podcast_id` BIGINT NOT NULL ,
 `user_id` INT NOT NULL ,
-`timestamp` TIMESTAMP NOT NULL ,
+`timestamp` INT NOT NULL ,
 PRIMARY KEY (`id`) ,
 FOREIGN KEY (`user_id`) REFERENCES Users(`id`)) ENGINE = InnoDB;
