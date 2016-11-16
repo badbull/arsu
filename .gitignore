@@ -1,10 +1,5 @@
 #https://github.com/github/gitignore/blob/master/Node.gitignore
 
-# Edited settings file
-src/config.js
-
-dev-docs/
-
 # Logs
 logs
 *.log
