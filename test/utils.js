@@ -1,4 +1,5 @@
 var jwt = require('jsonwebtoken');
+var bcrypt = require('bcrypt');
 var connection = require('../src/connection');
 var config = require('../src/config');
 
@@ -16,12 +17,17 @@ var utils = {
   },
 
   createTestUser: function() {
-    var user = this.testUser;
+    var user = {
+      username: this.testUser.username,
+      password: bcrypt.hashSync(this.testUser.password, 10),
+      is_admin: this.testUser.is_admin,
+      email: this.testUser.email
+    };
     connection.acquire(function(err, con) {
       con.query('insert into Users set ?', user, function(err, result) {
         con.release();
         if (err) {
-         console.log('Test user creation failed');
+        console.log('Test user creation failed');
         }
       });
     });

@@ -1,4 +1,5 @@
 var connection = require('../connection');
+var bcrypt = require('bcrypt');
 
 function User() {
   this.get = function(res) {
@@ -26,17 +27,20 @@ function User() {
   this.create = function(res, user) {
     // Admin flag cannot be set through this api for now
     if (user.is_admin) delete user.is_admin;
-    connection.acquire(function(err, con) {
-      con.query('insert into Users set ?', user, function(err, result) {
-        con.release();
-        if (err) {
-          res.status(400).send({message: 'User creation failed'});
-        } else {
-          res.status(201).send({
-            message: 'User created successfully',
-            id: result.insertId
-          });
-        }
+    bcrypt.hash(user.password, 10, function(hashErr, hash) {
+      user.password = hash;
+      connection.acquire(function(err, con) {
+        con.query('insert into Users set ?', user, function(err, result) {
+          con.release();
+          if (err) {
+            res.status(400).send({message: 'User creation failed'});
+          } else {
+            res.status(201).send({
+              message: 'User created successfully',
+              id: result.insertId
+            });
+          }
+        });
       });
     });
   };
