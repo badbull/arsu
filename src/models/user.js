@@ -45,7 +45,12 @@ function User() {
     });
   };
 
+  // TODO: if password is changed it should be hashed before saving to db
+  // after changing details user should also
+  // get a new token incl. correct details. What to do with the old one?
   this.edit = function(res, userId, user) {
+    // Admin flag cannot be set through this api for now
+    if (user.is_admin) delete user.is_admin;
     connection.acquire(function(err, con) {
       con.query('update Users set ? where id=?', [user, userId], function(err, result) {
         con.release();

@@ -6,7 +6,7 @@ REST API & database
 
 **Prerequisities:** Mysql/Mariadb database with name `arsu`
 
-Edit `src/config.sample.js` and save it to `config.js`.
+Edit [src/config.sample.js](src/config.sample.js) and save it to `config.js`.
 
 On the command-line type:
 
@@ -23,4 +23,15 @@ mysql -u<DB_USER> -p<DB_PASSWORD> arsu < build-db.sql
 npm install -g mocha 
 # Run tests
 npm test
+```
+
+## API Docs
+
+Generate documentation into [docs/](docs/) folder:
+
+```sh
+# Install apidocjs globally if missing:
+npm install -g apidoc 
+# Generate docs
+apidoc -i src/ -o docs/
 ```

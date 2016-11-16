@@ -16,9 +16,10 @@ module.exports = {
 
     /**
      * Check always if token exists (logged in)
+     * TODO: Change to proper middleware function
      */
     app.all(basePath + '*', function (req, res, next) {
-      if (req.path === basePath + 'login' ) {
+      if (req.path === basePath + 'login') {
         next();
       } else {
         var token = req.body.token || req.query.token || req.headers['x-access-token'];
@@ -31,8 +32,47 @@ module.exports = {
       }
     });
 
-    // Authentication endpoints
 
+  /**
+  * @apiDefine admin Admin user access only
+  * Valid authentication token with admin privileges must be provided within request.
+  */
+
+  /**
+  * @apiDefine token Logged in user access only
+  * Valid authentication token must be provided within request.
+  */
+
+   // Authentication endpoints
+
+   /**
+   * @api {post} /login Login
+   * @apiVersion 0.2.0
+   * @apiName PostAuth
+   * @apiGroup Authentication
+   * @apiPermission none
+   *
+   * @apiDescription Log in and get token for the user.
+   *
+   * @apiParam {String} username Username of the user.
+   * @apiParam {String} password Password of the user.
+   *
+   * @apiParamExample {json} Request-Example:
+   *    {
+   *      "username": "john",
+   *      "password": "examplepass"
+   *    }
+   *
+   *  @apiSuccess {String} token Token for the user authentication.
+   *
+   * @apiSuccessExample Success-Response:
+   *    HTTP/1.1 200 OK
+   *    {
+   *      message: 'Logged in successfully',
+   *      token: 'eyJhIkpXVCJ9.ey2NywiZXhwIjoxNDc4NTQwNDY3fQ.BPfXvi5RyAQ'
+   *    }
+   *
+   */
     app.post(basePath + 'login', function(req, res) {
       auth.login(req.body.username, req.body.password, res);
     });
@@ -42,9 +82,12 @@ module.exports = {
 
     app.route(basePath + 'users')
     /**
-     * @api {get} users Request User list
+     * @api {get} /users Request User list
+     * @apiVersion 0.2.0
      * @apiName GetUsers
      * @apiGroup User
+     * @apiPermission token
+     * @apiHeader {String} x-access-token Authentication token.
      *
      * @apiSuccess {Object[]} users List of users.
      * @apiSuccess {Number} users.id User id.
@@ -62,18 +105,83 @@ module.exports = {
       .get(function(req, res) {
         user.get(res);
       })
+      /**
+      * @api {post} /users Create a new User
+      * @apiVersion 0.2.0
+      * @apiName PostUser
+      * @apiGroup User
+      * @apiPermission token
+      * @apiHeader {String} x-access-token Authentication token.
+      *
+      * @apiDescription Creates a new user. To be changed in the future so that a token
+      * would not be needed and anyone can create a new user (register to the service)
+      *
+      * @apiParam {String} username Username of the user.
+      * @apiParam {String} password Password of the user.
+      * @apiParam {String} email Email address of the user.
+      *
+      * @apiParamExample {json} Request-Example:
+      *    {
+      *      "username": "john",
+      *      "password": "examplepass",
+      *      "email": "john@example.com"
+      *    }
+      *
+      * @apiSuccess (Success 201) {Number} id The new user id.
+      *
+      * @apiSuccessExample Success-Response:
+      *    HTTP/1.1 201 Created
+      *    {
+      *      message: 'User created successfully',
+      *      id: 69
+      *    }
+      */
       .post(function(req, res) {
         user.create(res, req.body);
       })
+     /**
+     * @api {put} /users Modify user data
+     * @apiVersion 0.2.0
+     * @apiName PutUser
+     * @apiGroup User
+     * @apiPermission token
+     * @apiHeader {String} [x-access-token] Authentication token.
+     * Optional if token is provided in request params or request body.
+     *
+     * @apiDescription User can change his/her username, password or email address.
+     * only the field to be updated is needed.
+     *
+     * @apiParam {String} [username] Username of the user.
+     * @apiParam {String} [password] Password of the user.
+     * @apiParam {String} [email] Email address of the user.
+     * @apiParam {String} [token] Access token. Optional if it is provided in the request headers or params.
+     *
+     * @apiParamExample {json} Request-Example:
+     *    {
+     *      "email": "john.new@example.com"
+     *    }
+     *
+     * @apiSuccess {String} message Message
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "message": "User data updated"
+     *     }
+     *
+     */
       .put(function(req, res) {
         user.edit(res, decodedUser.id, req.body);
       });
 
     app.route(basePath + 'users/:id')
     /**
-     * @api {get} users/:id Request User information
+     * @api {get} /users/:id Request User information
+     * @apiVersion 0.2.0
      * @apiName GetUser
      * @apiGroup User
+     * @apiPermission token
+     * @apiHeader {String} x-access-token Authentication token.
      *
      * @apiParam {Number} id Users unique ID.
      *
@@ -99,6 +207,32 @@ module.exports = {
       .get(function(req, res) {
         user.getById(res, req.params.id);
       })
+    /**
+     * @api {delete} /users/:id Delete a user
+     * @apiVersion 0.2.0
+     * @apiName DeleteUser
+     * @apiGroup User
+     * @apiPermission admin
+     * @apiHeader {String} x-access-token Authentication token.
+     *
+     * @apiParam {Number} id Unique ID of the user.
+     *
+     * @apiSuccess {String} message What happened
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "message": "User deleted"
+     *     }
+     *
+     * @apiError UserNotFound The id of the User was not found.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "message": "User Not Found"
+     *     }
+     */
       .delete(function(req, res) {
         user.deleteById(res, decodedUser, req.params.id);
       });

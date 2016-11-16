@@ -1,6 +1,6 @@
 {
   "name": "arsu-backend",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "User & playlist management backend api",
   "repository": "https://github.com/mattpe/arsu",
   "dependencies": {
@@ -19,5 +19,8 @@
     "start": "mocha && node src/app.js"
   },
   "author": "mattpe",
-  "license": "ISC"
+  "license": "ISC",
+  "apidoc": {
+    "title": "Arsu API docs"
+  }
 }
