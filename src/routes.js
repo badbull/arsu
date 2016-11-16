@@ -3,6 +3,7 @@ var user = require('./models/user');
 var auth = require('./models/authentication');
 var playlist = require('./models/playlist');
 var history = require('./models/history');
+var favourite = require('./models/favourite');
 var config = require('./config');
 
 var decodedUser;
@@ -146,7 +147,20 @@ module.exports = {
         history.deleteEntry(res, decodedUser.id, req.params.id);
       })
 
-    // Favourite endpoints
+    // Favourites endpoints
+
+    app.route(basePath + 'favourites')
+      .post(function (req, res) {
+        favourite.add(res, decodedUser.id, req.body);
+      })
+      .get(function (req, res) {
+        favourite.get(res, decodedUser.id);
+      });
+
+    app.route(basePath + 'favourites/:id')
+      .delete(function (req, res) {
+        favourite.delete(res, decodedUser.id, req.params.id);
+      })
 
     // Unfinished endpoints
 
