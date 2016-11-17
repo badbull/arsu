@@ -4,6 +4,7 @@
 src/config.js
 
 dev-docs/
+.vscode/
 
 # Logs
 logs
