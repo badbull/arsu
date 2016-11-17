@@ -98,7 +98,7 @@ module.exports = {
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     [{
-     *       "userid": 1,
+     *       "id": 1,
      *       "username": "johnd",
      *       "email": "john@example.com"
      *     }]
@@ -241,9 +241,57 @@ module.exports = {
     // Playlist endpoints
 
     app.route(basePath + 'playlists')
+      /**
+      * @api {get} /playlists Request a list of all playlists in service
+      * @apiVersion 0.2.0
+      * @apiName GetAllPlaylists
+      * @apiGroup Playlist
+      * @apiPermission token
+      * @apiHeader {String} x-access-token Authentication token.
+      *
+      * @apiSuccess {Object[]} playlists List of lists.
+      * @apiSuccess {Number} playlist.id Id of the playlist.
+      * @apiSuccess {String} playlist.playlist_name Name of the playlist.
+      * @apiSuccess {Number} playlist.user_id User id of the playlist's owner.
+      *
+      * @apiSuccessExample Success-Response:
+      *     HTTP/1.1 200 OK
+      *     [{
+      *       "id": 11,
+      *       "playlistname": "johnd",
+      *       "user_id": 69
+      *     }]
+      */
       .get(function(req, res) {
         playlist.get(res);
       })
+      /**
+      * @api {post} /playlists Create a new Playlist
+      * @apiVersion 0.2.0
+      * @apiName PostPlaylist
+      * @apiGroup Playlist
+      * @apiPermission token
+      * @apiHeader {String} x-access-token Authentication token.
+      *
+      * @apiDescription Creates a new playlist for the authenticated user.
+      *
+      * @apiParam {String} playlist_name Name of the playlist.
+      *
+      * @apiParamExample {json} Request-Example:
+      *    {
+      *      "playlist_name": "My playlist"
+      *    }
+      *
+      * @apiSuccess (Success 201) {String} message Result of the request.
+      * @apiSuccess (Success 201) {Number} id Id of the created playlist.
+      *
+      * @apiSuccessExample Success-Response:
+      *    HTTP/1.1 201 Created
+      *    {
+      *      message: 'Playlist created successfully',
+      *      id: 11
+      *    }
+      */
       .post(function(req, res) {
         playlist.create(res, decodedUser.id, req.body);
       });

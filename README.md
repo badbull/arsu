@@ -33,5 +33,5 @@ Generate documentation into [docs/](docs/) folder:
 # Install apidocjs globally if missing:
 npm install -g apidoc 
 # Generate docs
-apidoc -i src/ -o docs/
+npm run docs
 ```

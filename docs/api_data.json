@@ -63,6 +63,155 @@
     "groupTitle": "Authentication"
   },
   {
+    "type": "get",
+    "url": "/playlists",
+    "title": "Request a list of all playlists in service",
+    "version": "0.2.0",
+    "name": "GetAllPlaylists",
+    "group": "Playlist",
+    "permission": [
+      {
+        "name": "token",
+        "title": "Logged in user access only",
+        "description": "<p>Valid authentication token must be provided within request.</p>"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>Authentication token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "playlists",
+            "description": "<p>List of lists.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "playlist.id",
+            "description": "<p>Id of the playlist.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "playlist.playlist_name",
+            "description": "<p>Name of the playlist.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "playlist.user_id",
+            "description": "<p>User id of the playlist's owner.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n[{\n  \"id\": 11,\n  \"playlistname\": \"johnd\",\n  \"user_id\": 69\n}]",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/routes.js",
+    "groupTitle": "Playlist"
+  },
+  {
+    "type": "post",
+    "url": "/playlists",
+    "title": "Create a new Playlist",
+    "version": "0.2.0",
+    "name": "PostPlaylist",
+    "group": "Playlist",
+    "permission": [
+      {
+        "name": "token",
+        "title": "Logged in user access only",
+        "description": "<p>Valid authentication token must be provided within request.</p>"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>Authentication token.</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>Creates a new playlist for the authenticated user.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "playlist_name",
+            "description": "<p>Name of the playlist.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"playlist_name\": \"My playlist\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 201": [
+          {
+            "group": "Success 201",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Result of the request.</p>"
+          },
+          {
+            "group": "Success 201",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Id of the created playlist.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 201 Created\n{\n  message: 'Playlist created successfully',\n  id: 11\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/routes.js",
+    "groupTitle": "Playlist"
+  },
+  {
     "type": "delete",
     "url": "/users/:id",
     "title": "Delete a user",
@@ -303,7 +452,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n[{\n  \"userid\": 1,\n  \"username\": \"johnd\",\n  \"email\": \"john@example.com\"\n}]",
+          "content": "HTTP/1.1 200 OK\n[{\n  \"id\": 1,\n  \"username\": \"johnd\",\n  \"email\": \"john@example.com\"\n}]",
           "type": "json"
         }
       ]

@@ -16,11 +16,18 @@
   },
   "scripts": {
     "test": "mocha",
-    "start": "mocha && node src/app.js"
+    "debug": "node --nolazy --debug-brk=5858 src/app.js",
+    "start": "mocha && node src/app.js",
+    "docs": "apidoc -i src/ -o docs/"
   },
   "author": "mattpe",
   "license": "ISC",
   "apidoc": {
-    "title": "Arsu API docs"
+    "title": "Arsu API docs",
+    "order": [
+      "Authentication",
+      "Playlist",
+      "User"
+    ]
   }
 }
