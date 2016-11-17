@@ -12,6 +12,12 @@ app.use(bodyparser.json());
 app.set('basePath', config.basePath);
 
 connection.init();
+
+var authentication = require('./routes/authentication.route');
+var user = require('./routes/user.route');
+app.use(config.basePath + 'login', authentication);
+app.use(config.basePath + 'users', user);
+
 routes.configure(app);
 
 var server = app.listen(config.serverPort, function() {
