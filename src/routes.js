@@ -5,6 +5,7 @@ var playlist = require('./models/playlist');
 var history = require('./models/history');
 var favourite = require('./models/favourite');
 var unfinished = require('./models/unfinished');
+var interest = require('./models/interest');
 var config = require('./config');
 
 var decodedUser;
@@ -315,8 +316,19 @@ module.exports = {
         unfinished.delete(res, decodedUser.id, req.params.id);
       });
 
-
     // Interests endpoints
+
+    app.route(basePath + 'interests')
+      .post(function (req, res) {
+        interest.add(res, decodedUser.id, req.body);
+      })
+      .get(function (req, res) {
+        interest.get(res, decodedUser.id);
+      });
+    app.route(basePath + 'interests/:id')
+      .delete(function (req, res) {
+        interest.delete(res, decodedUser.id, req.params.id);
+      });
 
   }
 };
