@@ -62,16 +62,91 @@ router.route('/')
   });
 
 router.route('/user')
+ /**
+  * @api {get} /playlists/user Request a list of playlists of user
+  * @apiVersion 0.2.0
+  * @apiName GetCurrentUserPlaylists
+  * @apiGroup Playlist
+  * @apiPermission token
+  * @apiHeader {String} x-access-token Authentication token.
+  *
+  * @apiDescription Request a list of playlists created by authenticated user.
+  *
+  * @apiSuccess {Object[]} playlists List of lists.
+  * @apiSuccess {Number} playlist.id Id of the playlist.
+  * @apiSuccess {String} playlist.playlist_name Name of the playlist.
+  *
+  * @apiSuccessExample Success-Response:
+  *     HTTP/1.1 200 OK
+  *     [
+  *       { id: 75, playlist_name: 'Test playlist', user_id: 151 },
+  *       ...
+  *     ]
+  */
   .get(rmw.requireToken, function(req, res) {
     playlist.getByUserId(res, req.decodedUser.id);
   });
 
 router.route('/user/:id')
+ /**
+  * @api {get} /playlists/user/:id Request a list of playlists of user
+  * @apiVersion 0.2.0
+  * @apiName GetUserPlaylists
+  * @apiGroup Playlist
+  * @apiPermission token
+  * @apiHeader {String} x-access-token Authentication token.
+  *
+  * @apiDescription Request a list of playlists created by specific user.
+  *
+  * @apiParam {Number} id Id of the user.
+  *
+  * @apiSuccess {Object[]} playlists List of lists.
+  * @apiSuccess {Number} playlist.id Id of the playlist.
+  * @apiSuccess {String} playlist.playlist_name Name of the playlist.
+  *
+  * @apiSuccessExample Success-Response:
+  *     HTTP/1.1 200 OK
+  *     [
+  *       { id: 75, playlist_name: 'Test playlist', user_id: 151 },
+  *       ...
+  *     ]
+  */
   .get(rmw.requireToken, function(req, res) {
     playlist.getByUserId(res, req.params.id);
   });
 
 router.route('/:id')
+ /**
+  * @api {get} /playlists/:id Request a playlist
+  * @apiVersion 0.2.0
+  * @apiName GetPlaylist
+  * @apiGroup Playlist
+  * @apiPermission token
+  * @apiHeader {String} x-access-token Authentication token.
+  *
+  * @apiDescription Request a full playlist incl. contents created by authenticated user.
+  *
+  * @apiParam {Number} id Id of the playlist.
+  *
+  * @apiSuccess {Number} id Id of the playlist.
+  * @apiSuccess {Number} user_id Id of the owner.
+  * @apiSuccess {String} playlist_name Name of the playlist.
+  * @apiSuccess {Object[]} content List of playlist items.
+  * @apiSuccess {Number} content.id Id of the playlist item.
+  * @apiSuccess {Number} content.podcast_id Id of the podcast.
+  *
+  * @apiSuccessExample Success-Response:
+  *     HTTP/1.1 200 OK
+  *     {
+  *       playlist_id: 75,
+  *       user_id: 151,
+  *       playlist_name: 'Test playlist',
+  *       content: [
+  *         { id: 75, podcast_id: 1 },
+  *         ...
+  *       ]
+  *     }
+  */
   .get(rmw.requireToken, function(req, res) {
     playlist.getById(res, req.params.id);
   })

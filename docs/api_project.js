@@ -2,8 +2,8 @@ define({
   "title": "Arsu API docs",
   "order": [
     "Authentication",
-    "Playlist",
-    "User"
+    "User",
+    "Playlist"
   ],
   "name": "arsu-backend",
   "version": "0.2.0",
@@ -12,7 +12,7 @@ define({
   "apidoc": "0.2.0",
   "generator": {
     "name": "apidoc",
-    "time": "2016-11-17T14:45:45.126Z",
+    "time": "2016-11-18T14:06:36.876Z",
     "url": "http://apidocjs.com",
     "version": "0.16.1"
   }

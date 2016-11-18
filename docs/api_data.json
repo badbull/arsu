@@ -8,7 +8,9 @@
     "group": "Authentication",
     "permission": [
       {
-        "name": "none"
+        "name": "all",
+        "title": "No authentication needed.",
+        "description": ""
       }
     ],
     "description": "<p>Log in and get token for the user.</p>",
@@ -59,8 +61,208 @@
         }
       ]
     },
-    "filename": "src/routes.js",
+    "filename": "src/routes/authentication.routes.js",
     "groupTitle": "Authentication"
+  },
+  {
+    "type": "delete",
+    "url": "/favourites/:id",
+    "title": "Delete a favourite",
+    "version": "0.2.0",
+    "name": "DeleteFavourite",
+    "group": "Favourite",
+    "permission": [
+      {
+        "name": "token",
+        "title": "Logged in user access only",
+        "description": "<p>Valid authentication token must be provided within request.</p>"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>Authentication token.</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>Deletes a favourite of the authenticated user.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Id of the favourite.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Result of the request.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  message: 'Favourite deleted'\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/routes/favourite.routes.js",
+    "groupTitle": "Favourite"
+  },
+  {
+    "type": "get",
+    "url": "/favourites",
+    "title": "Request a list of favourites",
+    "version": "0.2.0",
+    "name": "GetCurrentUserFavourites",
+    "group": "Favourite",
+    "permission": [
+      {
+        "name": "token",
+        "title": "Logged in user access only",
+        "description": "<p>Valid authentication token must be provided within request.</p>"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>Authentication token.</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>Request a list of favourite podcasts added by authenticated user.</p>",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "playlists",
+            "description": "<p>List of lists.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "playlist.id",
+            "description": "<p>Id of the playlist.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n[\n  { id: 59, podcast_id: 1, user_id: 149 },\n      ...\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/routes/favourite.routes.js",
+    "groupTitle": "Favourite"
+  },
+  {
+    "type": "post",
+    "url": "/favourites",
+    "title": "Create a new favourite",
+    "version": "0.2.0",
+    "name": "PostFavourite",
+    "group": "Favourite",
+    "permission": [
+      {
+        "name": "token",
+        "title": "Logged in user access only",
+        "description": "<p>Valid authentication token must be provided within request.</p>"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>Authentication token.</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>Creates a new playlist for the authenticated user.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "podcast_id",
+            "description": "<p>Id of the podcast.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"podcast_id\": 6\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 201": [
+          {
+            "group": "Success 201",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Result of the request.</p>"
+          },
+          {
+            "group": "Success 201",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Id of the created playlist.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 201 Created\n{\n  message: 'Favourite added',\n  id: 111\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/routes/favourite.routes.js",
+    "groupTitle": "Favourite"
   },
   {
     "type": "get",
@@ -130,7 +332,249 @@
         }
       ]
     },
-    "filename": "src/routes.js",
+    "filename": "src/routes/playlist.routes.js",
+    "groupTitle": "Playlist"
+  },
+  {
+    "type": "get",
+    "url": "/playlists/user",
+    "title": "Request a list of playlists of user",
+    "version": "0.2.0",
+    "name": "GetCurrentUserPlaylists",
+    "group": "Playlist",
+    "permission": [
+      {
+        "name": "token",
+        "title": "Logged in user access only",
+        "description": "<p>Valid authentication token must be provided within request.</p>"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>Authentication token.</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>Request a list of playlists created by authenticated user.</p>",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "playlists",
+            "description": "<p>List of lists.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "playlist.id",
+            "description": "<p>Id of the playlist.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "playlist.playlist_name",
+            "description": "<p>Name of the playlist.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n[\n  { id: 75, playlist_name: 'Test playlist', user_id: 151 },\n  ...\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/routes/playlist.routes.js",
+    "groupTitle": "Playlist"
+  },
+  {
+    "type": "get",
+    "url": "/playlists/:id",
+    "title": "Request a playlist",
+    "version": "0.2.0",
+    "name": "GetPlaylist",
+    "group": "Playlist",
+    "permission": [
+      {
+        "name": "token",
+        "title": "Logged in user access only",
+        "description": "<p>Valid authentication token must be provided within request.</p>"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>Authentication token.</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>Request a full playlist incl. contents created by authenticated user.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Id of the playlist.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Id of the playlist.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>Id of the owner.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "playlist_name",
+            "description": "<p>Name of the playlist.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "content",
+            "description": "<p>List of playlist items.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "content.id",
+            "description": "<p>Id of the playlist item.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "content.podcast_id",
+            "description": "<p>Id of the podcast.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  playlist_id: 75,\n  user_id: 151,\n  playlist_name: 'Test playlist',\n  content: [\n    { id: 75, podcast_id: 1 },\n    ...\n  ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/routes/playlist.routes.js",
+    "groupTitle": "Playlist"
+  },
+  {
+    "type": "get",
+    "url": "/playlists/user/:id",
+    "title": "Request a list of playlists of user",
+    "version": "0.2.0",
+    "name": "GetUserPlaylists",
+    "group": "Playlist",
+    "permission": [
+      {
+        "name": "token",
+        "title": "Logged in user access only",
+        "description": "<p>Valid authentication token must be provided within request.</p>"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>Authentication token.</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>Request a list of playlists created by specific user.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Id of the user.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "playlists",
+            "description": "<p>List of lists.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "playlist.id",
+            "description": "<p>Id of the playlist.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "playlist.playlist_name",
+            "description": "<p>Name of the playlist.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n[\n  { id: 75, playlist_name: 'Test playlist', user_id: 151 },\n  ...\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/routes/playlist.routes.js",
     "groupTitle": "Playlist"
   },
   {
@@ -208,7 +652,7 @@
         }
       ]
     },
-    "filename": "src/routes.js",
+    "filename": "src/routes/playlist.routes.js",
     "groupTitle": "Playlist"
   },
   {
@@ -290,7 +734,7 @@
         }
       ]
     },
-    "filename": "src/routes.js",
+    "filename": "src/routes/user.routes.js",
     "groupTitle": "User"
   },
   {
@@ -386,7 +830,7 @@
         }
       ]
     },
-    "filename": "src/routes.js",
+    "filename": "src/routes/user.routes.js",
     "groupTitle": "User"
   },
   {
@@ -457,7 +901,7 @@
         }
       ]
     },
-    "filename": "src/routes.js",
+    "filename": "src/routes/user.routes.js",
     "groupTitle": "User"
   },
   {
@@ -469,25 +913,12 @@
     "group": "User",
     "permission": [
       {
-        "name": "token",
-        "title": "Logged in user access only",
-        "description": "<p>Valid authentication token must be provided within request.</p>"
+        "name": "all",
+        "title": "No authentication needed.",
+        "description": ""
       }
     ],
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "x-access-token",
-            "description": "<p>Authentication token.</p>"
-          }
-        ]
-      }
-    },
-    "description": "<p>Creates a new user. To be changed in the future so that a token would not be needed and anyone can create a new user (register to the service)</p>",
+    "description": "<p>Creates a new user. No authentication needed. Anyone can create a new user (register to the service).</p>",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -542,7 +973,7 @@
         }
       ]
     },
-    "filename": "src/routes.js",
+    "filename": "src/routes/user.routes.js",
     "groupTitle": "User"
   },
   {
@@ -634,7 +1065,7 @@
         }
       ]
     },
-    "filename": "src/routes.js",
+    "filename": "src/routes/user.routes.js",
     "groupTitle": "User"
   }
 ]
