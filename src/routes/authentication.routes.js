@@ -4,11 +4,25 @@ var auth = require('../models/authentication');
 var router = express.Router();
 
 /**
+ * @apiDefine all No authentication needed.
+ */
+
+/**
+ * @apiDefine token Logged in user access only
+ * Valid authentication token must be provided within request.
+ */
+
+/**
+ * @apiDefine admin Admin user access only
+ * Valid authentication token with admin privileges must be provided within request.
+ */
+
+/**
  * @api {post} /login Login
  * @apiVersion 0.2.0
  * @apiName PostAuth
  * @apiGroup Authentication
- * @apiPermission none
+ * @apiPermission all
  *
  * @apiDescription Log in and get token for the user.
  *

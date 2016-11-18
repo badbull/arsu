@@ -1,25 +1,9 @@
 var express = require('express');
-var jwt = require('jsonwebtoken');
 var user = require('../models/user');
 var config = require('../config');
+var rmw = require('./router-middleware');
 
 var router = express.Router();
-
-var decodedUser;
-
-/**
- * Check always if token exists (logged in)
- * TODO: Change to proper middleware function
- */
-router.all('*', function (req, res, next) {
-  var token = req.body.token || req.query.token || req.headers['x-access-token'];
-  try {
-    decodedUser = jwt.verify(token, config.tokenSecret);
-    next();
-  } catch (err) {
-    res.status(401).send({message:'token missing or incorrect'});
-  }
-});
 
 router.route('/')
   /**
@@ -43,7 +27,7 @@ router.route('/')
    *       "email": "john@example.com"
    *     }]
    */
-  .get(function(req, res) {
+  .get(rmw.requireToken, function(req, res) {
     user.get(res);
   })
   /**
@@ -51,11 +35,10 @@ router.route('/')
    * @apiVersion 0.2.0
    * @apiName PostUser
    * @apiGroup User
-   * @apiPermission token
-   * @apiHeader {String} x-access-token Authentication token.
+   * @apiPermission all
    *
-   * @apiDescription Creates a new user. To be changed in the future so that a token
-   * would not be needed and anyone can create a new user (register to the service)
+   * @apiDescription Creates a new user. No authentication needed.
+   * Anyone can create a new user (register to the service).
    *
    * @apiParam {String} username Username of the user.
    * @apiParam {String} password Password of the user.
@@ -111,8 +94,8 @@ router.route('/')
    *     }
    *
    */
-  .put(function(req, res) {
-    user.edit(res, decodedUser.id, req.body);
+  .put(rmw.requireToken, function(req, res) {
+    user.edit(res, req.decodedUser.id, req.body);
   });
 
 router.route('/:id')
@@ -145,7 +128,7 @@ router.route('/:id')
    *       "message": "User Not Found"
    *     }
    */
-  .get(function(req, res) {
+  .get(rmw.requireToken, function(req, res) {
     user.getById(res, req.params.id);
   })
   /**
@@ -174,8 +157,8 @@ router.route('/:id')
    *       "message": "User Not Found"
    *     }
    */
-  .delete(function(req, res) {
-    user.deleteById(res, decodedUser, req.params.id);
+  .delete(rmw.requireToken, function(req, res) {
+    user.deleteById(res, req.decodedUser, req.params.id);
   });
 
 module.exports = router;

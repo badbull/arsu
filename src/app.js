@@ -8,17 +8,26 @@ var app = express();
 app.use(bodyparser.urlencoded({extended: true}));
 app.use(bodyparser.json());
 
-// set root path for api
+// set root path for api (used in tests)
 app.set('basePath', config.basePath);
 
 connection.init();
 
-var authentication = require('./routes/authentication.route');
-var user = require('./routes/user.route');
+// Routing
+var authentication = require('./routes/authentication.routes');
+var user = require('./routes/user.routes');
+var playlist = require('./routes/playlist.routes');
+var favourite = require('./routes/favourite.routes');
+var history = require('./routes/history.routes');
+var interest = require('./routes/interest.routes');
+var unfinished = require('./routes/unfinished.routes');
 app.use(config.basePath + 'login', authentication);
 app.use(config.basePath + 'users', user);
-
-routes.configure(app);
+app.use(config.basePath + 'playlists', playlist);
+app.use(config.basePath + 'favourites', favourite);
+app.use(config.basePath + 'history', history);
+app.use(config.basePath + 'interests', interest);
+app.use(config.basePath + 'unfinished', unfinished);
 
 var server = app.listen(config.serverPort, function() {
   console.log('Server listening on port ' + server.address().port);

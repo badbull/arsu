@@ -26,8 +26,8 @@
     "title": "Arsu API docs",
     "order": [
       "Authentication",
-      "Playlist",
-      "User"
+      "User",
+      "Playlist"
     ]
   }
 }

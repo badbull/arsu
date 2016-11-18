@@ -16,13 +16,21 @@ npm install
 # Create db tables
 mysql -u<DB_USER> -p<DB_PASSWORD> arsu < build-db.sql
 ```
+
 ## Testing
 
 ```sh
-# Install mocha globally if missing:
+# Install mocha globally if missing
 npm install -g mocha 
 # Run tests
 npm test
+```
+
+## Running
+
+```sh
+# Run tests and start the node server
+npm start
 ```
 
 ## API Docs
