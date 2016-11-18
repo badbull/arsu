@@ -1,7 +1,6 @@
 var express = require('express');
 var bodyparser = require('body-parser');
 var connection = require('./connection');
-var routes = require('./routes');
 var config = require('./config');
 
 var app = express();
