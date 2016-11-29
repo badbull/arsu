@@ -28,6 +28,9 @@ app.use(config.basePath + 'history', history);
 app.use(config.basePath + 'interests', interest);
 app.use(config.basePath + 'unfinished', unfinished);
 
+// Serve generated apidocs
+app.use(config.basePath + 'docs', express.static(__dirname + '/../docs'));
+
 var server = app.listen(config.serverPort, function() {
   console.log('Server listening on port ' + server.address().port);
 });
