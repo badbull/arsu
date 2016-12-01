@@ -1,13 +1,13 @@
 /**
  * Common middleware functions for routing.
  */
-var jwt = require('jsonwebtoken');
-var config = require('../config');
+const jwt = require('jsonwebtoken');
+const config = require('../config');
 
-var routerMiddleware = {
+const routerMiddleware = {
 
   requireToken: function (req, res, next) {
-    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+    const token = req.body.token || req.query.token || req.headers['x-access-token'];
     try {
       req.decodedUser = jwt.verify(token, config.tokenSecret);
       next();

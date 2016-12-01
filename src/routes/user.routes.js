@@ -1,9 +1,8 @@
-var express = require('express');
-var user = require('../models/user');
-var config = require('../config');
-var rmw = require('./router-middleware');
+const express = require('express');
+const user = require('../models/user');
+const rmw = require('./router-middleware');
 
-var router = express.Router();
+const router = express.Router();
 
 router.route('/')
   /**

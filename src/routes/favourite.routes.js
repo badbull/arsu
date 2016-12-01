@@ -1,9 +1,8 @@
-var express = require('express');
-var favourite = require('../models/favourite');
-var config = require('../config');
-var rmw = require('./router-middleware');
+const express = require('express');
+const favourite = require('../models/favourite');
+const rmw = require('./router-middleware');
 
-var router = express.Router();
+const router = express.Router();
 
 router.route('/')
   .all(rmw.requireToken)
@@ -25,7 +24,7 @@ router.route('/')
   *    }
   *
   * @apiSuccess (Success 201) {String} message Result of the request.
-  * @apiSuccess (Success 201) {Number} id Id of the created playlist.
+  * @apiSuccess (Success 201) {Number} id Id of the created favourite item.
   *
   * @apiSuccessExample Success-Response:
   *    HTTP/1.1 201 Created
@@ -47,8 +46,10 @@ router.route('/')
   *
   * @apiDescription Request a list of favourite podcasts added by authenticated user.
   *
-  * @apiSuccess {Object[]} playlists List of lists.
-  * @apiSuccess {Number} playlist.id Id of the playlist.
+  * @apiSuccess {Object[]} favourites List of favourite items.
+  * @apiSuccess {Number} favourites.id Id of the favourite.
+  * @apiSuccess {Number} favourites.podcast_id Id of the podcast.
+  * @apiSuccess {Number} favourites.user_id Id of the user.
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK

@@ -1,7 +1,7 @@
-var express = require('express');
-var auth = require('../models/authentication');
+const express = require('express');
+const auth = require('../models/authentication');
 
-var router = express.Router();
+const router = express.Router();
 
 /**
  * @apiDefine all No authentication needed.

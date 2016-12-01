@@ -1,9 +1,8 @@
-var express = require('express');
-var unfinished = require('../models/unfinished');
-var config = require('../config');
-var rmw = require('./router-middleware');
+const express = require('express');
+const unfinished = require('../models/unfinished');
+const rmw = require('./router-middleware');
 
-var router = express.Router();
+const router = express.Router();
 
 router.route('/')
   .all(rmw.requireToken)
