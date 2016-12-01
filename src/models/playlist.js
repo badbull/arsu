@@ -1,4 +1,4 @@
-var connection = require('../connection');
+const connection = require('../connection');
 
 function Playlist() {
 
@@ -21,6 +21,7 @@ function Playlist() {
     connection.acquire(function(err, con) {
       con.query('SELECT * FROM Playlists LEFT JOIN PlaylistContent ON Playlists.id=PlaylistContent.playlist_id WHERE Playlists.id=?', playlistId, function(err, result) {
         con.release();
+        let output;
         if (!result[0]) {
           return res.status(404).send({message: 'Playlist not found'});
         } else if (!result[0].id) {
@@ -43,7 +44,7 @@ function Playlist() {
             delete item.user_id;
           }
         }
-      res.send(output);
+        res.send(output);
       });
     });
   };
