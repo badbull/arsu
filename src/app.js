@@ -1,9 +1,9 @@
-var express = require('express');
-var bodyparser = require('body-parser');
-var connection = require('./connection');
-var config = require('./config');
+const express = require('express');
+const bodyparser = require('body-parser');
+const connection = require('./connection');
+const config = require('./config');
 
-var app = express();
+const app = express();
 app.use(bodyparser.urlencoded({extended: true}));
 app.use(bodyparser.json());
 
@@ -13,13 +13,13 @@ app.set('basePath', config.basePath);
 connection.init();
 
 // Routing
-var authentication = require('./routes/authentication.routes');
-var user = require('./routes/user.routes');
-var playlist = require('./routes/playlist.routes');
-var favourite = require('./routes/favourite.routes');
-var history = require('./routes/history.routes');
-var interest = require('./routes/interest.routes');
-var unfinished = require('./routes/unfinished.routes');
+const authentication = require('./routes/authentication.routes');
+const user = require('./routes/user.routes');
+const playlist = require('./routes/playlist.routes');
+const favourite = require('./routes/favourite.routes');
+const history = require('./routes/history.routes');
+const interest = require('./routes/interest.routes');
+const unfinished = require('./routes/unfinished.routes');
 app.use(config.basePath + 'login', authentication);
 app.use(config.basePath + 'users', user);
 app.use(config.basePath + 'playlists', playlist);
@@ -31,7 +31,7 @@ app.use(config.basePath + 'unfinished', unfinished);
 // Serve generated apidocs
 app.use(config.basePath + 'docs', express.static(__dirname + '/../docs'));
 
-var server = app.listen(config.serverPort, function() {
+const server = app.listen(config.serverPort, function() {
   console.log('Server listening on port ' + server.address().port);
 });
 
