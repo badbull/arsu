@@ -1,24 +1,21 @@
-var chai = require('chai');
-var chaiHttp = require('chai-http');
-var app = require('../src/app');
-var utils = require('./utils');
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const app = require('../src/app');
+const utils = require('./utils');
 
-var should = chai.should();
+const should = chai.should();
 chai.use(chaiHttp);
 
 describe('Playlists', function() {
 
-  var basePath = app.get('basePath');
+  const modelPath = app.get('basePath') + 'playlists';
 
-  var testPlaylistId;
-  var testUserId;
+  let testPlaylistId;
+  let testUserId;
 
   before(function (done) {
-    //TODO: delete all playlists by testuser and add a sample (in utils.js?)
-    chai.request(app).get(basePath).end(function (err, res){
-      // use testToken to resolve user's id
-      testUserId = utils.getTestUserId(app.get('testToken'));
-    });
+    // use testToken to resolve user's id
+    testUserId = utils.getTestUserId(app.get('testToken'));
     done();
   });
 
@@ -28,7 +25,7 @@ describe('Playlists', function() {
 
   it('should add a SINGLE playlist on /playlists POST', function(done) {
     chai.request(app)
-      .post(basePath + 'playlists')
+      .post(modelPath)
       .set('x-access-token', app.get('testToken'))
       .send({
         playlist_name: "Test playlist"
@@ -47,7 +44,7 @@ describe('Playlists', function() {
 
   it('should list ALL playlists on /playlists GET', function(done) {
     chai.request(app)
-      .get(basePath + 'playlists')
+      .get(modelPath)
       .set('x-access-token', app.get('testToken'))
       .end(function(err, res){
         res.should.have.status(200);
@@ -63,7 +60,7 @@ describe('Playlists', function() {
 
   it('should list ALL playlists owned by CURRENT user on /playlists/user GET', function(done) {
     chai.request(app)
-      .get(basePath + 'playlists/user')
+      .get(modelPath + '/user')
       .set('x-access-token', app.get('testToken'))
       .end(function(err, res){
         res.should.have.status(200);
@@ -79,7 +76,7 @@ describe('Playlists', function() {
 
   it('should list ALL playlists owned by a specific user on /playlists/user/:id GET', function(done) {
     chai.request(app)
-      .get(basePath + 'playlists/user/' + testUserId)
+      .get(modelPath + '/user/' + testUserId)
       .set('x-access-token', app.get('testToken'))
       .end(function(err, res){
         res.should.have.status(200);
@@ -97,7 +94,7 @@ describe('Playlists', function() {
 
   it('should update (add content to) a SINGLE playlist on /playlists/:id PUT', function(done) {
     chai.request(app)
-      .put(basePath + 'playlists/' + testPlaylistId)
+      .put(modelPath + '/' + testPlaylistId)
       .set('x-access-token', app.get('testToken'))
       .send({
         podcast_id: 1
@@ -113,7 +110,7 @@ describe('Playlists', function() {
 
   it('should list ALL playlists on /playlists GET', function(done) {
     chai.request(app)
-      .get(basePath + 'playlists')
+      .get(modelPath)
       .set('x-access-token', app.get('testToken'))
       .end(function(err, res){
         res.should.have.status(200);
@@ -129,7 +126,7 @@ describe('Playlists', function() {
 
   it('should list a SINGLE playlist incl. content on /playlists/:id GET', function(done) {
     chai.request(app)
-      .get(basePath + 'playlists/' + testPlaylistId)
+      .get(modelPath + '/' + testPlaylistId)
       .set('x-access-token', app.get('testToken'))
       .end(function(err, res){
         res.should.have.status(200);
@@ -150,7 +147,7 @@ describe('Playlists', function() {
 
   it('should delete a SINGLE playlist and ALL content on /playlists/:id DELETE', function(done) {
     chai.request(app)
-      .delete(basePath + 'playlists/' + testPlaylistId)
+      .delete(modelPath + '/' + testPlaylistId)
       .set('x-access-token', app.get('testToken'))
       .end(function(err, res){
         res.should.have.status(200);

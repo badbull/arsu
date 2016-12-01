@@ -1,14 +1,14 @@
-var chai = require('chai');
-var chaiHttp = require('chai-http');
-var app = require('../src/app');
-var should = chai.should();
-var utils = require('./utils');
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const app = require('../src/app');
+const utils = require('./utils');
 
+const should = chai.should();
 chai.use(chaiHttp);
 
 describe('Authentication', function() {
 
-  var basePath = app.get('basePath');
+  const basePath = app.get('basePath');
 
   before(function (done) {
     utils.removeTestUser();

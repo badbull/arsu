@@ -1,15 +1,15 @@
-var chai = require('chai');
-var chaiHttp = require('chai-http');
-var app = require('../src/app');
-var utils = require('./utils');
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const app = require('../src/app');
+const utils = require('./utils');
 
-var should = chai.should();
+const should = chai.should();
 chai.use(chaiHttp);
 
 describe('Users', function() {
 
-  var basePath = app.get('basePath');
-  var addedUserId;
+  const modelPath = app.get('basePath') + 'users';
+  let addedUserId;
 
   after(function (done){
     utils.removeTestUser();
@@ -18,7 +18,7 @@ describe('Users', function() {
 
   it('should add a SINGLE user on /users POST', function(done) {
     chai.request(app)
-      .post(basePath + 'users')
+      .post(modelPath)
       .set('x-access-token', app.get('testToken'))
       .send({
         username: "johnd",
@@ -40,7 +40,7 @@ describe('Users', function() {
 
   it('should update the CURRENT user on /users PUT', function(done) {
     chai.request(app)
-      .put(basePath + 'users')
+      .put(modelPath)
       .set('x-access-token', app.get('testToken'))
       .send({
         email: "test-user@example.com"
@@ -57,7 +57,7 @@ describe('Users', function() {
 
   it('should list ALL users on /users GET', function(done) {
     chai.request(app)
-      .get(basePath + 'users')
+      .get(modelPath)
       .set('x-access-token', app.get('testToken'))
       .end(function(err, res){
         res.should.have.status(200);
@@ -71,7 +71,7 @@ describe('Users', function() {
 
   it('should list a SINGLE user on /users/:id GET', function(done) {
     chai.request(app)
-      .get(basePath + 'users/' + addedUserId)
+      .get(modelPath + '/' + addedUserId)
       .set('x-access-token', app.get('testToken'))
       .end(function(err, res){
         res.should.have.status(200);
@@ -88,7 +88,7 @@ describe('Users', function() {
   // Only for admin accounts
   it('should delete a SINGLE user on /users/:id DELETE', function(done) {
     chai.request(app)
-      .delete(basePath + 'users/' + addedUserId)
+      .delete(modelPath + '/' + addedUserId)
       .set('x-access-token', app.get('testToken'))
       .end(function(err, res){
         res.should.have.status(200);

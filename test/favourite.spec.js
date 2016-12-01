@@ -1,14 +1,14 @@
-var chai = require('chai');
-var chaiHttp = require('chai-http');
-var app = require('../src/app');
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const app = require('../src/app');
 
-var should = chai.should();
+const should = chai.should();
 chai.use(chaiHttp);
 
 describe('Favourites', function() {
 
-  var modelPath = app.get('basePath') + 'favourites';
-  var addedId;
+  const modelPath = app.get('basePath') + 'favourites';
+  let addedId;
 
   it('should add a SINGLE favourite on /favourites POST', function(done) {
     chai.request(app)

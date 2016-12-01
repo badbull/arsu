@@ -1,14 +1,14 @@
-var chai = require('chai');
-var chaiHttp = require('chai-http');
-var app = require('../src/app');
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const app = require('../src/app');
 
-var should = chai.should();
+const should = chai.should();
 chai.use(chaiHttp);
 
 describe('History', function() {
 
-  var basePath = app.get('basePath');
-  var addedEntryId;
+  const basePath = app.get('basePath');
+  let addedEntryId;
 
   it('should add a SINGLE history entry on /history POST', function(done) {
     chai.request(app)

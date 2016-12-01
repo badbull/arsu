@@ -1,9 +1,9 @@
-var jwt = require('jsonwebtoken');
-var bcrypt = require('bcrypt');
-var connection = require('../src/connection');
-var config = require('../src/config');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const connection = require('../src/connection');
+const config = require('../src/config');
 
-var utils = {
+const utils = {
 
   testUser: {
     username: 'testUser',
@@ -17,7 +17,7 @@ var utils = {
   },
 
   createTestUser: function() {
-    var user = {
+    const user = {
       username: this.testUser.username,
       password: bcrypt.hashSync(this.testUser.password, 10),
       is_admin: this.testUser.is_admin,
@@ -34,7 +34,7 @@ var utils = {
   },
 
   removeTestUser: function() {
-    var username = this.testUser.username;
+    const username = this.testUser.username;
     connection.acquire(function(err, con) {
       con.query('delete from Users where username=?', username, function(err, result) {
         con.release();
