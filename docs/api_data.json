@@ -163,15 +163,29 @@
             "group": "Success 200",
             "type": "Object[]",
             "optional": false,
-            "field": "playlists",
-            "description": "<p>List of lists.</p>"
+            "field": "favourites",
+            "description": "<p>List of favourite items.</p>"
           },
           {
             "group": "Success 200",
             "type": "Number",
             "optional": false,
-            "field": "playlist.id",
-            "description": "<p>Id of the playlist.</p>"
+            "field": "favourites.id",
+            "description": "<p>Id of the favourite.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "favourites.podcast_id",
+            "description": "<p>Id of the podcast.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "favourites.user_id",
+            "description": "<p>Id of the user.</p>"
           }
         ]
       },
@@ -249,7 +263,7 @@
             "type": "Number",
             "optional": false,
             "field": "id",
-            "description": "<p>Id of the created playlist.</p>"
+            "description": "<p>Id of the created favourite item.</p>"
           }
         ]
       },
@@ -263,6 +277,220 @@
     },
     "filename": "src/routes/favourite.routes.js",
     "groupTitle": "Favourite"
+  },
+  {
+    "type": "delete",
+    "url": "/history/:id",
+    "title": "Delete a history entry",
+    "version": "0.2.0",
+    "name": "DeleteHistory",
+    "group": "History",
+    "permission": [
+      {
+        "name": "token",
+        "title": "Logged in user access only",
+        "description": "<p>Valid authentication token must be provided within request.</p>"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>Authentication token.</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>Deletes a history entry of the authenticated user.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Id of the history entry.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Result of the request.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  message: 'History entry deleted'\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/routes/history.routes.js",
+    "groupTitle": "History"
+  },
+  {
+    "type": "get",
+    "url": "/history",
+    "title": "Request a list of history entries",
+    "version": "0.2.0",
+    "name": "GetCurrentUserHistory",
+    "group": "History",
+    "permission": [
+      {
+        "name": "token",
+        "title": "Logged in user access only",
+        "description": "<p>Valid authentication token must be provided within request.</p>"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>Authentication token.</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>Request a list of podcast history by authenticated user.</p>",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "history",
+            "description": "<p>List of history items.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "history.id",
+            "description": "<p>Id of the history entry.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "history.podcast_id",
+            "description": "<p>Id of the podcast.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "history.user_id",
+            "description": "<p>Id of the user.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n[\n  { id: 59, podcast_id: 1, user_id: 149 },\n      ...\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/routes/history.routes.js",
+    "groupTitle": "History"
+  },
+  {
+    "type": "post",
+    "url": "/history",
+    "title": "Create a new history entry",
+    "version": "0.2.0",
+    "name": "PostHistory",
+    "group": "History",
+    "permission": [
+      {
+        "name": "token",
+        "title": "Logged in user access only",
+        "description": "<p>Valid authentication token must be provided within request.</p>"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>Authentication token.</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>Creates a new playlist for the authenticated user.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "podcast_id",
+            "description": "<p>Id of the podcast.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"podcast_id\": 6\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 201": [
+          {
+            "group": "Success 201",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Result of the request.</p>"
+          },
+          {
+            "group": "Success 201",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Id of the created history entry.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 201 Created\n{\n  message: 'History entry added',\n  id: 111\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/routes/history.routes.js",
+    "groupTitle": "History"
   },
   {
     "type": "get",
